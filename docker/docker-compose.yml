@@ -29,7 +29,7 @@ services:
 
     networks:
       - web # Connect to the external network for Traefik access
-      - vivid-internal # Connect to the internal network for DB/Redis access
+      - internal # Connect to the internal network for DB/Redis access
     labels:
       # Enable Traefik for this service
       - "traefik.enable=true"
