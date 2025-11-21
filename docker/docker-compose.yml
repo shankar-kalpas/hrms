@@ -23,9 +23,28 @@ services:
     working_dir: /home/frappe
     volumes:
       - .:/workspace
-    ports:
-      - 8000:8000
-      - 9000:9000
+    # ports:
+    #   - 8000:8000
+    #   - 9000:9000
+
+    networks:
+      - web # Connect to the external network for Traefik access
+      - vivid-internal # Connect to the internal network for DB/Redis access
+    labels:
+      # Enable Traefik for this service
+      - "traefik.enable=true"
+      - "traefik.http.routers.hrms-frappe.rule=Host(`frappe.edalytics.com`)"
+      - "traefik.http.routers.hrms-frappe.entrypoints=websecure"
+      - "traefik.http.routers.hrms-frappe.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.hrms-frappe.loadbalancer.server.port=80"
+
 
 volumes:
   mariadb-data:
+
+
+networks:
+  web:
+    external: true
+  internal:
+    external: false
